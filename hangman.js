@@ -16,12 +16,13 @@ var remainingGuesses = 9;
 // the code calls the askForNewGuess function recursively. 
 // But if the player wins or loses, then that function is called twice, incorrectly.
 // adding a boolean here that is reset to be false, only if the player wins or loses, solves
-// the problem - hence the variable name, problem.
+// the problem - hence the variable name, problem. ;)
 var problem = true;
 
 function startGame() {
+	
 	chosenWord = wordsAvailable[Math.floor(Math.random() * wordsAvailable.length)];
-	console.log("chosen Word: " + chosenWord);
+	//console.log("chosen Word: " + chosenWord);
 
 	lettersinChosenWord = chosenWord.split("");
 	//console.log("lettersinChosenWord: " + lettersinChosenWord);	
@@ -29,18 +30,18 @@ function startGame() {
 	numberLetters = lettersinChosenWord.length;
 	//console.log(numberLetters);
 
-	//reset variables that need to be at the beginning of each round of game
+	//reset variables that need to be reset at the beginning of each round of game
 	remainingGuesses = 9;
 	incorrectGuesses = [];
 	blanksWithLetters = [];
 
-	// fill in the blanks (not yet guessed) and the successful guess
+	// fill in the blanks (not yet guessed) and the successful guesses
 	for (i = 0; i < numberLetters; i++) {
 		blanksWithLetters.push("_");
 	} 
 
 	//console.log(blanksWithLetters);
-	//console.log(blanksWithLetters.join("  "));
+	console.log("\n" + blanksWithLetters.join("  "));
 
 	//set my inquire into a function so it can be recalled
 	
@@ -51,11 +52,11 @@ function startGame() {
 				{
 					type: "input",
 					name: "letter",
-					message: "Guess a letter!"
+					message: "HOUSEHOLD FURNITURE HANGMAN: Guess a letter!"
 				}
 			])
 			.then(function(response) {
-    		// If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
+    		
 				var chosenLetter = response.letter;
 				//console.log("letter chosen: " + chosenLetter);
 				checkGuesses(chosenLetter);
@@ -64,7 +65,7 @@ function startGame() {
 				// need to skip this next call if a new game as started
 				//console.log(problem);
 				if (problem) {
-					console.log("inside askForNewGuess");
+					//console.log("inside askForNewGuess");
 					askForNewGuess();
 				} else {
 					//console.log("the line 67 call for askForNewGuess inside askForNewGuess no call");
@@ -73,7 +74,7 @@ function startGame() {
 			});
 		}
 
-		console.log("outside askForNewGuess");
+		//console.log("outside askForNewGuess");
 		askForNewGuess();
 		
 }
@@ -105,7 +106,7 @@ function checkGuesses(chosenLetter) {
 		incorrectGuesses.push(chosenLetter);
 		remainingGuesses--;
 		//console.log(isLetter);
-		console.log(remainingGuesses);
+		//console.log(remainingGuesses);
 		//console.log(blanksWithLetters);
 	}
 }
@@ -113,11 +114,11 @@ function checkGuesses(chosenLetter) {
 function roundComplete() {
 
 	//log progress in game so far for the user
-	console.log("Win Count: " + winsCount + "\nLoss Count: " + 
+	console.log("\nWin Count: " + winsCount + "\nLoss Count: " + 
 		lossesCount + "\nGuesses Left: " + remainingGuesses);
 
 	//log progress in game so far for the user
-	console.log(blanksWithLetters.join("  "));
+	console.log("\n" + blanksWithLetters.join("  "));
 	console.log("Incorrect guesses so far: " + incorrectGuesses.join("  "));
 	problem = true;
 	// check to see if the user won
@@ -125,42 +126,50 @@ function roundComplete() {
 		// guesses are all correct
 		winsCount++;
 		console.log("YOU WON!!");
-		console.log("Number of wins: " + winsCount);
+		console.log("\nNumber of wins: " + winsCount + "\n----------------------");
 		problem = false;
-		console.log(problem);
-		startGame();
+		//console.log(problem);
+				endGame();
+
+		// startGame();
 
 	} else if (remainingGuesses === 0) {
 		// no more guesses, so user lost
 		lossesCount++;
 		console.log("You lost.  Sad.");
-		console.log( "Number of losses: " + lossesCount);
+		console.log( "\nNumber of losses: " + lossesCount + "\n----------------------");
 		problem = false;
-		console.log(problem);
-		startGame();
+		//console.log(problem);
+		//startGame();
+		endGame();
 
 	} 
 
-//console.log("finished roundComplete(), inside roundComplete()");
 }
-console.log("outside roundComplete, above startGame");
-//console.log("wordsAvailable = " + wordsAvailable);
 
-// inquirer.prompt([
-// 	{
-// 		type: "input",
-// 		name: "letter",
-// 		message: "Do you want to continue? (y or n)"
-// 	}
-// ])
-// .then(function(response) {
-//     // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
-// 	var confirmPlay = response.letter;
-// 	console.log("yes or no: " + confirmPlay);	
-// 	if (confirmPlay === "y") {
- 	startGame();
-// 	}	
-// });
+function endGame() {
+	inquirer.prompt([
+		{
+		type: "input",
+		name: "letter",
+		message: "Do you want to continue? (y or n)"
+		}
+	]).then(function(response) {
+ 
+		var confirmPlay = response.letter;
+		if (confirmPlay === "n") {
+			console.log("Thanks for playing!");
+			process.exit(0);
+		}
+		else if (confirmPlay === "y") {
+			startGame();
+		}
+		
+	});
+	
+}
+
+startGame();
 
 
 
