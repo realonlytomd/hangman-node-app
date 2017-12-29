@@ -28,7 +28,7 @@ function startGame() {
 	//console.log("lettersinChosenWord: " + lettersinChosenWord);	
 
 	numberLetters = lettersinChosenWord.length;
-	//console.log(numberLetters);
+	console.log(numberLetters);
 
 	//reset variables that need to be reset at the beginning of each round of game
 	remainingGuesses = 9;

@@ -2,6 +2,7 @@
 var inquirer = require("inquirer");
 var request = require("request");
 
+
 // set up global variables
 var chosenWord = "";
 
